@@ -1,9 +1,6 @@
 <template>
   <div>
     <div>
-      Safra Smart Invest
-    </div>
-    <div>
       <router-view/>
     </div>
   </div>
