@@ -2,28 +2,36 @@ package br.com.safra.entities;
 
 public class Investment {
     String type;
+    Long custumerId;
     Integer minInvestMonths;
     Double totalAmount;
     Double actualInterestRate;
     Double safraInterestRate;
 
+    
     public Investment() {
     }
-
-    public Investment(String type, Integer minInvestMonths, Double totalAmount, Double actualInterestRate,
-            Double safraInterestRate) {
+    
+    public Investment(String type, Long custumerId, Integer minInvestMonths, Double totalAmount, Double actualInterestRate,
+    Double safraInterestRate) {
         this.type = type;
         this.minInvestMonths = minInvestMonths;
         this.totalAmount = totalAmount;
         this.actualInterestRate = actualInterestRate;
         this.safraInterestRate = safraInterestRate;
     }
-
+    
     public String getType() {
         return type;
     }
     public void setType(String type) {
         this.type = type;
+    }
+    public Long getCustumerId() {
+        return custumerId;
+    }
+    public void setCustumerId(Long custumerId) {
+        this.custumerId = custumerId;
     }
     public Integer getMinInvestMonths() {
         return minInvestMonths;
