@@ -1,12 +1,6 @@
 <template>
     <div>
       <img class="logoSafra" src="../assets/logo-safra.svg" width="200" height="150" />
-        <div class="apresentacaoUsuario">
-          Safra Smart Invest
-          <br>
-          Olá Carla!
-        </div>
-        
         <DataTable :value="dataClient" :rows="10" filterDisplay="menu"
         dataKey="id" :rowHover="true" class="p-datatable-dataclient"
         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
@@ -17,38 +11,38 @@
                  </div>
             </template>
             
-            <Column field="type" header="Type" sortable style="min-width: 14rem; ">
+            <Column field="type" header="Tipo de Investimento" sortable style="min-width: 14rem; ">
                 <template #body="{data}">
                     {{data.type}}
                 </template>
             </Column>
-            <Column field="minInvestMonths" header="Min. Invest Months" sortable style="min-width: 14rem">
+            <Column field="minInvestMonths" header="Prazo (meses)" sortable style="min-width: 14rem">
                 <template #body="{data}">
                     <span  class="pi pi-calendar">{{data.minInvestMonths}}</span>
                 </template>
             </Column>
-            <Column field="totalAmount" header="Total Amount" sortable style="min-width: 14rem">
+            <Column field="totalAmount" header="Valor Investido" sortable style="min-width: 14rem">
                 <template #body="{data}">
                   <img class="valorReal" src="../assets/NotacaoMonetaria.png" width="15" />
                     <span>{{data.totalAmount}}</span>
                 </template>
             </Column>
-            <Column field="actualInterestRate" header="Actual Interest Rate" sortable style="min-width: 14rem">
+            <Column field="actualInterestRate" header="Ganho No Investimento Atual" sortable style="min-width: 14rem; color: red">
                 <template #body="{data}">
                   <!-- <img src="../assets/NotacaoMonetaria.png" :class="'flag flag-' + data.actualInterestRate" width="15" /> -->
+                    <img class="valorReal" src="../assets/NotacaoMonetaria.png" width="15"/>
                     <span class="valorPercentual">{{data.actualInterestRate}}</span>
-                    <img src="../assets/percent.svg" width="15"/>
                 </template>
             </Column>
-            <Column field="safraInterestRate" header="Safra Interest Rate" sortable style="min-width: 14rem">
+            <Column field="safraInterestRate" header="Ganho Investindo no Safra" sortable style="min-width: 14rem">
                 <template #body="{data}">
                   <!-- <img src="../assets/NotacaoMonetaria.png" :class="'flag flag-' + data.safraInterestRate" width="15" /> -->
+                    <img class="valorReal" src="../assets/NotacaoMonetaria.png" width="15"/>
                     
                         <span class="valorPercentual">
                         {{data.safraInterestRate}}
                         </span>
                       
-                    <img src="../assets/percent.svg" width="15"/>
                 </template>
             </Column>
         </DataTable>
@@ -56,30 +50,35 @@
         <div class="novoCliente">
           <div>Quero abrir uma conta no Safra!</div>
           <br>
-          <Button label="Clique aqui" class="btnAbraSuaConta" />
+          <a href="https://www.safra.com.br/lp/conta-digital-safra/formulario.htm">
+            <Button label="Clique aqui" class="btnAbraSuaConta" />
+          </a>
         </div>
         
 	</div>
 </template>
 
 <script>
+import EquityService from '@/services/EquityService.js'
 
 export default {
   name: 'AvailableInvestment',
   data() {
     return {
       dataClient: null,
+      equityService: null
     }
   },
   mounted() {
-    this.dataClient = [
-      {type: 'TIPO 1', minInvestMonths: '12', totalAmount: '0.38', actualInterestRate: '0.14', safraInterestRate: '2.53'},
-      {type: 'TIPO 2', minInvestMonths: '13', totalAmount: '0.66', actualInterestRate: '0.55', safraInterestRate: '1.78'},
-      {type: 'TIPO 3', minInvestMonths: '14', totalAmount: '0.35', actualInterestRate: '0.29', safraInterestRate: '3.66'},
-      {type: 'TIPO 4', minInvestMonths: '15', totalAmount: '0.88', actualInterestRate: '0.18', safraInterestRate: '5.77'},
-      {type: 'TIPO 5', minInvestMonths: '16', totalAmount: '0.99', actualInterestRate: '0.05', safraInterestRate: '1.97'},
-      {type: 'TIPO 6', minInvestMonths: '17', totalAmount: '1.02', actualInterestRate: '0.10', safraInterestRate: '8.00'},
-    ];
+    // this.dataClient = [
+    //   {type: 'TIPO 1', minInvestMonths: '12', totalAmount: '0.38', actualInterestRate: '0.14', safraInterestRate: '2.53'},
+    //   {type: 'TIPO 2', minInvestMonths: '13', totalAmount: '0.66', actualInterestRate: '0.55', safraInterestRate: '1.78'},
+    //   {type: 'TIPO 3', minInvestMonths: '14', totalAmount: '0.35', actualInterestRate: '0.29', safraInterestRate: '3.66'},
+    //   {type: 'TIPO 4', minInvestMonths: '15', totalAmount: '0.88', actualInterestRate: '0.18', safraInterestRate: '5.77'},
+    //   {type: 'TIPO 5', minInvestMonths: '16', totalAmount: '0.99', actualInterestRate: '0.05', safraInterestRate: '1.97'},
+    //   {type: 'TIPO 6', minInvestMonths: '17', totalAmount: '1.02', actualInterestRate: '0.10', safraInterestRate: '8.00'},
+    // ];
+    this.equityService.getEquities(this.responseEquity, this.errorEquity);
   },
   computed: {
     
@@ -87,17 +86,17 @@ export default {
       return true;
     }
   },
-  method: {
-    // local para criação de metodos
-
-    //Nome das colunas da tabela
-    // chamada rest pro backend nodejs (fetch, axios)
-    // type
-    // minInvestMonths
-    // totalAmount
-    // actualInterestRate
-    // safraInterestRate 
-
+  methods: {
+    responseEquity(response) {
+      console.log("data.data", response)
+      this.dataClient = response
+    },
+    errorEquity(error) {
+      console.log("error: ", error)
+    }
+  },
+  created() {
+    this.equityService = new EquityService();
   }
 }
 </script>
@@ -110,9 +109,9 @@ export default {
 @import "primevue/resources/primevue.min.css";
 
 .logoSafra {
-  position: relative;
-  right: 42%;
-  margin-top: -7%;
+  right: 30px;
+  position: absolute;
+  margin-top: -8%;
 }
 
 .apresentacaoUsuario {

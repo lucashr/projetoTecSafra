@@ -1,12 +1,18 @@
 import {createRouter, createWebHistory} from 'vue-router';
 
 import AvailableInvestment from "@/components/AvailableInvestment"
+import FirstPage from "@/components/FirstPage"
 
 const routes = [
     {
-        path: '/',
+        path: '/investment',
         name: 'AvailableInvestment',
         component: AvailableInvestment
+    },
+    {
+        path: '/',
+        name: 'FirstPage',
+        component: FirstPage
     }
 ]
 
