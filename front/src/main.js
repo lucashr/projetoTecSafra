@@ -9,7 +9,6 @@ import Row from 'primevue/row';                     //optional for row
 
 import Button from 'primevue/button';
 
-
 createApp(App)
     .use(router)
     .component('DataTable', DataTable)
